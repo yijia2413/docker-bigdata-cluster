@@ -119,6 +119,15 @@ services:
   links:
      - "hive-base"
 
+ hive-server:
+  build:
+    context: ./hive/hive-server
+    labels:
+      description: "Image for Hive Server"
+  image: hive-server:0.2
+  links:
+     - "hive-base"
+
  spark-base:
   build:
      context: ./spark/base
