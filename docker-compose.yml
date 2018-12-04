@@ -8,7 +8,7 @@ services:
     mem_limit: ${POSTGRES_DB_MEM_LIM}
     mem_reservation: ${POSTGRES_DB_MEM_RES}
     volumes:
-      - postgres_pgdata:/var/lib/postgresql/data/pgdata
+      - /data1/dockervolumes/postgres/pgdata:/var/lib/postgresql/data/pgdata
     networks:
       bigdatacluster:
         aliases:
@@ -20,7 +20,7 @@ services:
     mem_limit: ${REDIS_MEM_LIM}
     mem_reservation: ${REDIS_MEM_RES}
     volumes:
-      - redis_data:/data
+      - /data1/dockervolumes/redis/data:/data
     networks:
       bigdatacluster:
         aliases:
@@ -34,8 +34,8 @@ services:
     mem_limit: ${ZOOKEEPER_MEM_LIM}
     mem_reservation: ${ZOOKEEPER_MEM_RES}
     volumes:
-      - zknode1_data:/data
-      - zknode1_log:/datalog
+      - /data1/dockervolumes/zookeeper/zknode1/data:/data
+      - /data1/dockervolumes/zookeeper/zknode1/log:/datalog
     networks:
       bigdatacluster:
         aliases:
@@ -53,8 +53,8 @@ services:
     mem_limit: ${ZOOKEEPER_MEM_LIM}
     mem_reservation: ${ZOOKEEPER_MEM_RES}
     volumes:
-      - zknode2_data:/data
-      - zknode2_log:/datalog
+      - /data1/dockervolumes/zookeeper/zknode2/data:/data
+      - /data1/dockervolumes/zookeeper/zknode2/log:/datalog
     networks:
       bigdatacluster:
         aliases:
@@ -72,8 +72,8 @@ services:
     mem_limit: ${ZOOKEEPER_MEM_LIM}
     mem_reservation: ${ZOOKEEPER_MEM_RES}
     volumes:
-      - zknode3_data:/data
-      - zknode3_log:/datalog
+      - /data1/dockervolumes/zookeeper/zknode3/data:/data
+      - /data1/dockervolumes/zookeeper/zknode3/log:/datalog
     networks:
       bigdatacluster:
         aliases:
@@ -193,8 +193,8 @@ services:
     mem_limit: ${AIRFLOW_WEB_MEM_LIM}
     mem_reservation: ${AIRFLOW_WEB_MEM_RES}
     volumes:
-      - airflow_dag:/usr/local/airflow/dags
-      - airflow_log:/usr/local/airflow/logs
+      - /data1/dockervolumes/airflow/dags:/usr/local/airflow/dags
+      - /data1/dockervolumes/airflow/logs:/usr/local/airflow/logs
     depends_on:
       postgres:
         condition: service_healthy
@@ -218,8 +218,8 @@ services:
     mem_limit: ${AIRFLOW_SCH_MEM_LIM}
     mem_reservation: ${AIRFLOW_SCH_MEM_RES}
     volumes:
-      - airflow_dag:/usr/local/airflow/dags
-      - airflow_log:/usr/local/airflow/logs
+      - /data1/dockervolumes/airflow/dags:/usr/local/airflow/dags
+      - /data1/dockervolumes/airflow/logs:/usr/local/airflow/logs
     depends_on:
       airflow-webui:
         condition: service_healthy
@@ -241,8 +241,8 @@ services:
     mem_limit: ${AIRFLOW_WRK_MEM_LIM}
     mem_reservation: ${AIRFLOW_WRK_MEM_RES}
     volumes:
-      - airflow_dag:/usr/local/airflow/dags
-      - airflow_log:/usr/local/airflow/logs
+      - /data1/dockervolumes/airflow/dags:/usr/local/airflow/dags
+      - /data1/dockervolumes/airflow/logs:/usr/local/airflow/logs
     depends_on:
       airflow-scheduler:
         condition: service_healthy
@@ -265,7 +265,7 @@ services:
     mem_limit: ${HADOOP_NN_MEM_LIM}
     mem_reservation: ${HADOOP_NN_MEM_RES}
     volumes:
-      - hadoop_namenode:/hadoop/dfs/name
+      - /data1/dockervolumes/hadoop/nn:/hadoop/dfs/name
     networks:
         bigdatacluster:
           aliases:
@@ -285,7 +285,7 @@ services:
       hadoop-namenode :
          condition: service_healthy
     volumes:
-      - hadoop_datanode1:/hadoop/dfs/data
+      - /data2/dockervolumes/hadoop/dn1:/hadoop/dfs/data
     networks:
         bigdatacluster:
           aliases:
@@ -303,7 +303,7 @@ services:
       hadoop-namenode:
          condition: service_healthy
     volumes:
-      - hadoop_datanode2:/hadoop/dfs/data
+      - /data2/dockervolumes/hadoop/dn2:/hadoop/dfs/data
     networks:
         bigdatacluster:
           aliases:
@@ -322,7 +322,7 @@ services:
       hadoop-namenode:
          condition: service_healthy
     volumes:
-      - hadoop_datanode3:/hadoop/dfs/data
+      - /data2/dockervolumes/hadoop/dn3:/hadoop/dfs/data
     networks:
         bigdatacluster:
           aliases:
@@ -357,7 +357,7 @@ services:
       yarn-resourcemanager:
          condition: service_healthy
     volumes:
-      - hadoop_historyserver:/hadoop/yarn/timeline
+      - /data1/dockervolumes/yarn/hs:/hadoop/yarn/timeline
     networks:
         bigdatacluster:
           aliases:
@@ -458,7 +458,7 @@ services:
           aliases:
             - sparkmaster.bigdatacluster.com
     volumes:
-       - spark_master_logs:/var/log/spark-master   
+       - /data1/dockervolumes/spark/master/logs:/var/log/spark-master   
     depends_on:
       yarn-resourcemanager:
          condition: service_healthy
@@ -476,7 +476,7 @@ services:
           aliases:
             - sparkworker1.bigdatacluster.com
     volumes:
-       - spark_worker1_logs:/var/log/spark-worker   
+       - /data2/dockervolumes/spark/worker1/logs:/var/log/spark-worker   
     depends_on:
        spark-master:
          condition: service_healthy
@@ -496,7 +496,7 @@ services:
           aliases:
             - sparkworker2.bigdatacluster.com
     volumes:
-       - spark_worker2_logs:/var/log/spark-worker   
+       - /data2/dockervolumes/spark/worker2/logs:/var/log/spark-worker   
     depends_on:
        spark-master:
          condition: service_healthy
@@ -516,7 +516,7 @@ services:
           aliases:
             - sparkworker3.bigdatacluster.com
     volumes:
-       - spark_worker3_logs:/var/log/spark-worker   
+       - /data2/dockervolumes/spark/worker3/logs:/var/log/spark-worker   
     depends_on:
        spark-master:
          condition: service_healthy
@@ -525,84 +525,6 @@ services:
     env_file:
       - ./bigdata-cluster.env
     
-  
-volumes:
-  redis_data:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/redis/data
-  postgres_pgdata:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/postgres/pgdata
-  airflow_dag:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/airflow/dags
-  airflow_log:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/airflow/logs               
-  zknode1_data:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/zookeeper/zknode1/data
-  zknode1_log:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/zookeeper/zknode1/log
-  zknode2_data:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/zookeeper/zknode2/data
-  zknode2_log:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/zookeeper/zknode2/log
-  zknode3_data:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/zookeeper/zknode3/data
-  zknode3_log:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/zookeeper/zknode3/log 
-  hadoop_namenode:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/hadoop/nn   
-  hadoop_datanode1:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data2/dockervolumes/hadoop/dn1
-  hadoop_datanode2:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data2/dockervolumes/hadoop/dn2
-  hadoop_datanode3:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data2/dockervolumes/hadoop/dn3
-  hadoop_historyserver:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/yarn/hs
-  spark_master_logs:
-          driver: local-persist
-          driver_opts:
-               mountpoint: /data1/dockervolumes/spark/master/logs
-  spark_worker1_logs:
-         driver: local-persist
-         driver_opts:
-               mountpoint: /data2/dockervolumes/spark/worker1/logs
-  spark_worker2_logs:
-         driver: local-persist
-         driver_opts:
-               mountpoint: /data2/dockervolumes/spark/worker2/logs
-  spark_worker3_logs:
-         driver: local-persist
-         driver_opts:
-               mountpoint: /data2/dockervolumes/spark/worker3/logs
 networks:
   bigdatacluster:
     external: true

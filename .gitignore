@@ -1,3 +1,7 @@
 #Ignore log files
 *.log
 vscode.code-workspace
+*.tar.gz
+*.tgz
+*.zip
+/scripts/tars
